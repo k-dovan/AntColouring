@@ -1,28 +1,36 @@
-
 import networkx as nx
-import numpy as np
 from netwulf import visualize
 
-numberOfNodes = -1
-edges = []
+files = ["inithx.i.3.col", "jean.col"]
 
-# with open("data/jean.col") as file_in:
-with open("data/inithx.i.3.col") as file_in:
-    for line in file_in:
-        arr = line.split()
-        if arr[0] == 'p':
-            numberOfNodes = int(arr[2])
-        else:
-            if arr[0] == 'e':
-                edges.append((int(arr[1]), int(arr[2])))
 
-#print(numberOfNodes)
-#print(edges)
+class Graph:
+    def __init__(self, num_of_nodes: int, edges_):
+        self.nodes = [i for i in range(1, num_of_nodes + 1)]
+        self.edges = edges_
+
+
+def file_to_graph(file: str):
+    num_of_nodes = -1
+    edges = []
+    path = "data/" + file
+    with open(path) as file_in:
+        for line in file_in:
+            arr = line.split()
+            if arr[0] == 'p':
+                num_of_nodes = int(arr[2])
+            else:
+                if arr[0] == 'e':
+                    edges.append((int(arr[1]), int(arr[2])))
+    graph1 = Graph(num_of_nodes, edges)
+    return graph1
+
 
 # Create a graph
-G = nx.Graph()
-nodes = [i for i in range(1,numberOfNodes+1)]
-G.add_nodes_from(nodes)
-G.add_edges_from(edges)
+if __name__ == "__main__":
+    G = nx.Graph()
+    G_local = file_to_graph(files[1])
+    G.add_nodes_from(G_local.nodes)
+    G.add_edges_from(G_local.edges)
 
-visualize(G)
+    visualize(G)
