@@ -1,3 +1,6 @@
+# Katarzyna Rzeczyca, Van Khanh Do
+# Ant colouring algorithm
+# Grafy i sieci
 import networkx as nx
 from netwulf import visualize
 
