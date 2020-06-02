@@ -42,8 +42,16 @@ if __name__ == "__main__":
     # edges1 = ((1, 2), (1, 3), (2, 1), (3, 1), (3, 4), (4, 3))
     # graph1 = Graph(4, edges1)
 
-    graph2 = file_to_graph(files[1])
+    graph2 = file_to_graph(files[2])
     best_solution = ant_colony(graph2)
     print("best_solution and best_q")
     print(best_solution.q)
     print(best_solution.colours)
+    print(len(best_solution.colours))
+
+    # [Khanh] check if existing adjacent nodes have the same colour
+    for e in graph2.edges:
+        # print(e[0])
+        if(best_solution.colours[e[0]-1] == best_solution.colours[e[1]-1]):
+            print ("Bad situation occured!")
+            break

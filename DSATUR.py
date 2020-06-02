@@ -53,7 +53,13 @@ def neigh_colours_update(vertex: int, vert_colour: int, edges, neighbour_colours
     if deg_l[vertex - 1] == 0:
         return
 
-    neighbour_vertex = [edges[index][1] for index, edge in enumerate(edges) if edges[index][0] == vertex]
+    # neighbour_vertex = [edges[index][1] for index, edge in enumerate(edges) if edges[index][0] == vertex]
+    # [Khanh] examine both cases: neighbour number is less than OR greater than vertex
+    neighbour_vertex = [edges[index][0] for index, edge in enumerate(edges) if edges[index][1] == vertex] +\
+                       [edges[index][1] for index, edge in enumerate(edges) if edges[index][0] == vertex]
+    # [Khanh] remove duplicate neighbours if graph is not simple graph (In fact, it should be)
+    neighbour_vertex = list(set(neighbour_vertex))
+
     for neighbour in neighbour_vertex:
         if vert_colour not in neighbour_colours_l[neighbour - 1]:
             ind = neighbour - 1

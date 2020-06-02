@@ -4,7 +4,7 @@
 import networkx as nx
 from netwulf import visualize
 
-files = ["inithx.i.3.col", "jean.col"]
+files = ["jean.col", "le450_5a.col","le450_5b.col", "le450_5c.col", "le450_5d.col"]
 
 
 class Graph:
@@ -32,7 +32,7 @@ def file_to_graph(file: str):
 # Create a graph
 if __name__ == "__main__":
     G = nx.Graph()
-    G_local = file_to_graph(files[1])
+    G_local = file_to_graph(files[0])
     G.add_nodes_from(G_local.nodes)
     G.add_edges_from(G_local.edges)
 
