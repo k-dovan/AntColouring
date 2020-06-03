@@ -5,8 +5,6 @@ from read_graph import Graph, file_to_graph, files
 from random import choice
 
 
-# I assumed that all of the graphs are undirected but we must check it!
-# deg(...) functions works only if graphs are undirected.
 # deg(...) - counts vertices degrees
 def deg(graph: Graph):
     deg_l = [0] * len(graph.nodes)
@@ -58,15 +56,30 @@ def neigh_colours_update(vertex: int, vert_colour: int, edges, neighbour_colours
     neighbour_vertex = [edges[index][0] for index, edge in enumerate(edges) if edges[index][1] == vertex] +\
                        [edges[index][1] for index, edge in enumerate(edges) if edges[index][0] == vertex]
     # [Khanh] remove duplicate neighbours if graph is not simple graph (In fact, it should be)
+    # [Kasia] it must be simple. Otherwise we can't colour it
     neighbour_vertex = list(set(neighbour_vertex))
 
     for neighbour in neighbour_vertex:
         if vert_colour not in neighbour_colours_l[neighbour - 1]:
             ind = neighbour - 1
             neighbour_colours_l[ind].append(vert_colour)
+
+    # [Kasia] vertex should also remember his own colour
+    neighbour_colours_l[vertex - 1].append(vert_colour)
     neighbour_colours_uncol[:] = [colours for index, colours in enumerate(neighbour_colours_l) if
                                index + 1 in uncoloured_nodes_list]
     return
+
+
+# [Kasia]
+# uncoloured_check(...) - integrity check
+def uncoloured_check(neighbour_colours_l, neighbour_colours_uncol, uncoloured_nodes_list):
+    if len(neighbour_colours_uncol) != len(uncoloured_nodes_list):
+        raise Exception("neighbour_colours_uncoloured) != len(uncoloured_nodes)")
+    for i in range(len(uncoloured_nodes_list)):
+        i2 = uncoloured_nodes_list[i] - 1
+        if neighbour_colours_l[i2] != neighbour_colours_uncol[i]:
+            raise Exception("neighbour_colours and neighbour_colours_uncoloured not coherent")
 
 
 def remove_from_uncoloured(current_vertex: int, uncoloured_nodes_list, neighbour_colours_uncol):
@@ -86,7 +99,8 @@ def dsatur(graph: Graph):
     vertex_colours = [0 for i in range(num_of_nodes)]
     deg_list = deg(graph)
     while uncoloured_nodes:
-        # deterministic version
+        # [Kasia] integrity check
+        uncoloured_check(neighbour_colours, neighbour_colours_uncoloured, uncoloured_nodes)
         current_vertex = choose_vert(neighbour_colours_uncoloured, deg_list, uncoloured_nodes)
         vertex_colours[current_vertex - 1] = colour_vert(current_vertex, neighbour_colours)
         neigh_colours_update(current_vertex, vertex_colours[current_vertex - 1], graph.edges, neighbour_colours,

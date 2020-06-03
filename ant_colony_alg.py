@@ -12,7 +12,19 @@ class BestSolution:
         self.colours = []
 
 
+# [Kasia] check if graph is simple and make it directed
+def is_simple_undirected(graph: Graph):
+    for edge in graph.edges:
+        if edge[0] == edge[1]:
+            raise Exception('graph not simple')
+        opposite_edge = (int(edge[1]), int(edge[0]))
+        if opposite_edge not in graph.edges:
+            # make graph directed
+            graph.edges.append(opposite_edge)
+
+
 def ant_colony(graph: Graph, n_ants=3, max_cycles=3, p_coeff=0.9):
+    is_simple_undirected(graph)
     # Variables
     num_of_nodes = len(graph.nodes)
     M_trail = np.ones((num_of_nodes, num_of_nodes))
@@ -39,19 +51,17 @@ def ant_colony(graph: Graph, n_ants=3, max_cycles=3, p_coeff=0.9):
 
 
 if __name__ == "__main__":
-    # edges1 = ((1, 2), (1, 3), (2, 1), (3, 1), (3, 4), (4, 3))
-    # graph1 = Graph(4, edges1)
 
-    graph2 = file_to_graph(files[2])
-    best_solution = ant_colony(graph2)
-    print("best_solution and best_q")
-    print(best_solution.q)
-    print(best_solution.colours)
-    print(len(best_solution.colours))
+    print("Chromatic number:")
+    for graph in files:
+        print(graph)
+        graph2 = file_to_graph(graph)
+        best_solution = ant_colony(graph2, 10, 10)
+        print(best_solution.q)
 
-    # [Khanh] check if existing adjacent nodes have the same colour
-    for e in graph2.edges:
-        # print(e[0])
-        if(best_solution.colours[e[0]-1] == best_solution.colours[e[1]-1]):
-            print ("Bad situation occured!")
-            break
+        # [Khanh] check if existing adjacent nodes have the same colour
+        for e in graph2.edges:
+            # print(e[0])
+            if(best_solution.colours[e[0]-1] == best_solution.colours[e[1]-1]):
+                print ("Bad situation occured! - wrong colouring")
+                break
