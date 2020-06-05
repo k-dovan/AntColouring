@@ -1,7 +1,9 @@
 # Katarzyna Rzeczyca, Van Khanh Do
 # Ant colouring algorithm
 # Grafy i sieci
-from DSATUR import dsatur
+#
+# Ant colony algorithm implementation
+from DSATUR import dsatur, MTrail
 from read_graph import Graph, file_to_graph, files
 import numpy as np
 
@@ -27,14 +29,16 @@ def ant_colony(graph: Graph, n_ants=3, max_cycles=3, p_coeff=0.9):
     is_simple_undirected(graph)
     # Variables
     num_of_nodes = len(graph.nodes)
-    M_trail = np.ones((num_of_nodes, num_of_nodes))
+    # [Kasia2] - now we have class MTrail in DSATUR.py
+    trail_matrix = MTrail(num_of_nodes)
+    M_trail = trail_matrix.M
     best_solution = BestSolution()
     x, y = np.ogrid[0:num_of_nodes, 0:num_of_nodes]
     # Algorithm
     for cycle in range(1, max_cycles):
         delta_M = np.zeros((num_of_nodes, num_of_nodes))
         for ant in range(1, n_ants):
-            solution = dsatur(graph)
+            solution = dsatur(graph, trail_matrix)
             # "chromatic" number
             q = max(solution)
             if q < best_solution.q:
@@ -56,7 +60,7 @@ if __name__ == "__main__":
     for graph in files:
         print(graph)
         graph2 = file_to_graph(graph)
-        best_solution = ant_colony(graph2, 10, 10)
+        best_solution = ant_colony(graph2)
         print(best_solution.q)
 
         # [Khanh] check if existing adjacent nodes have the same colour
