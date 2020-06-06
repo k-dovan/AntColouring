@@ -6,6 +6,7 @@
 from DSATUR import dsatur, MTrail
 from read_graph import Graph, file_to_graph, files
 import numpy as np
+from visualizing_graph import visualizing_coloured_graph
 
 
 class BestSolution:
@@ -57,17 +58,19 @@ def ant_colony(graph: Graph, n_ants=5, max_cycles=5, p_coeff=0.5, alpha=2, beta=
 if __name__ == "__main__":
 
     print("Chromatic number:")
-    for graph in files:
-        print(graph)
-        graph2 = file_to_graph(graph)
-        best_solution = ant_colony(graph2)
-        print(best_solution.q)
-        print(best_solution.colours)
 
-        # [Khanh] check if existing adjacent nodes have the same colour
-        for e in graph2.edges:
-            # print(e[0])
-            if(best_solution.colours[e[0]-1] == best_solution.colours[e[1]-1]):
-                print ("Bad situation occured! - wrong colouring")
-                break
-        break
+    print(files[0])
+    graph = file_to_graph(files[0])
+    best_solution = ant_colony(graph)
+    print(best_solution.q)
+    print(best_solution.colours)
+
+    # [Khanh] check if existing adjacent nodes have the same colour
+    for e in graph.edges:
+        # print(e[0])
+        if (best_solution.colours[e[0] - 1] == best_solution.colours[e[1] - 1]):
+            print("Bad situation occured! - wrong colouring")
+            break
+
+    # visualize coloured graph
+    visualizing_coloured_graph(graph, best_solution.colours)
