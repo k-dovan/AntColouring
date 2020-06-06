@@ -6,7 +6,8 @@
 from DSATUR import dsatur, MTrail
 from read_graph import Graph, file_to_graph, files
 import numpy as np
-from visualizing_graph import visualizing_coloured_graph
+from visualizing_graph import visualizing_coloured_graph, \
+     visualizing_coloured_graph_by_netwulf
 
 
 class BestSolution:
@@ -73,4 +74,7 @@ if __name__ == "__main__":
             break
 
     # visualize coloured graph
-    visualizing_coloured_graph(graph, best_solution.colours)
+    # visualizing_coloured_graph(graph, best_solution.colours)
+
+    # visualize by netwulf
+    visualizing_coloured_graph_by_netwulf(graph,best_solution.colours)
