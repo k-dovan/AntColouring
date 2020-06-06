@@ -24,7 +24,7 @@ if __name__ == '__main__':
             results = []
             for i in range(1):
                 # todo parameters
-                results.append(ant_colony(graph, 1, 1))
+                results.append(ant_colony(graph, 20, 5))
 
             file.write('colouring achieved:\n')
             results_chromatic = [res.q for res in results]
@@ -33,3 +33,5 @@ if __name__ == '__main__':
 
             iteration += 1
         file.close()
+
+    print("Finish chromatic test!")

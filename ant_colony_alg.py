@@ -49,12 +49,9 @@ def ant_colony(graph: Graph, n_ants=5, max_cycles=5, p_coeff=0.5, alpha=2, beta=
             solution_arr = np.array(solution)
             delta_M = np.where(solution_arr[x] == solution_arr[y], delta_M[x, y],
                                delta_M[x, y] + (1 / q))
+            print('Cycle: ' + str(cycle) + ' , Ant: ' + str(ant))
         M_trail = np.add(np.multiply(M_trail, p_coeff), delta_M)
     return best_solution
-
-
-# TODO: why do we need M_trail?
-
 
 if __name__ == "__main__":
 
