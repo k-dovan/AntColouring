@@ -25,7 +25,7 @@ def is_simple_undirected(graph: Graph):
             graph.edges.append(opposite_edge)
 
 
-def ant_colony(graph: Graph, n_ants=3, max_cycles=3, p_coeff=0.9):
+def ant_colony(graph: Graph, n_ants=5, max_cycles=5, p_coeff=0.5, alpha=2, beta=4):
     is_simple_undirected(graph)
     # Variables
     num_of_nodes = len(graph.nodes)
@@ -35,10 +35,10 @@ def ant_colony(graph: Graph, n_ants=3, max_cycles=3, p_coeff=0.9):
     best_solution = BestSolution()
     x, y = np.ogrid[0:num_of_nodes, 0:num_of_nodes]
     # Algorithm
-    for cycle in range(1, max_cycles):
+    for cycle in range(0, max_cycles):
         delta_M = np.zeros((num_of_nodes, num_of_nodes))
-        for ant in range(1, n_ants):
-            solution = dsatur(graph, trail_matrix)
+        for ant in range(0, n_ants):
+            solution = dsatur(graph, trail_matrix, alpha, beta)
             # "chromatic" number
             q = max(solution)
             if q < best_solution.q:
@@ -62,6 +62,7 @@ if __name__ == "__main__":
         graph2 = file_to_graph(graph)
         best_solution = ant_colony(graph2)
         print(best_solution.q)
+        print(best_solution.colours)
 
         # [Khanh] check if existing adjacent nodes have the same colour
         for e in graph2.edges:
@@ -69,3 +70,4 @@ if __name__ == "__main__":
             if(best_solution.colours[e[0]-1] == best_solution.colours[e[1]-1]):
                 print ("Bad situation occured! - wrong colouring")
                 break
+        break

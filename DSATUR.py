@@ -8,7 +8,6 @@ from random import choice, random
 from math import pow
 import numpy as np
 
-
 # [Kasia2]
 # Trail matrix
 class MTrail:
@@ -153,7 +152,7 @@ def probability_uncol_choice(vertex: int, colour: int, graph, colour_groups_l, M
 # choose_vert_dsatur(...) - choose vertex according to first staregy shown in ANT_DSATUR procedure on page 300
 # # #           in A. Hertz "Ants can colour graphs"
 def choose_vert_dsatur(graph, colour_groups_l, M_trail, neighbour_colours,
-                       alpha_1: float, beta_1: float, partial_solution, uncoloured_vertice, neigh_colour_uncoloured, deg_l, depth=3):
+                       alpha_1: float, beta_1: float, partial_solution, uncoloured_vertice, neigh_colour_uncoloured, deg_l):
     # first must be chosen traditionally - otherwise it doesn't work
     if not colour_groups_l:
         vertex = choose_vert(neigh_colour_uncoloured, deg_l, uncoloured_vertice)
@@ -165,25 +164,23 @@ def choose_vert_dsatur(graph, colour_groups_l, M_trail, neighbour_colours,
         p_it = probability_uncol_choice(vertex, colour, graph, colour_groups_l, M_trail, neighbour_colours, alpha_1,
                                         beta_1, partial_solution)
         p_it_list.append(p_it)
+
         rand_float = random()
         if rand_float <= p_it:
             return vertex, colour
-    # [Kasia2] - if we get no vertex after choice repetition we get the one with maximum probability
-    if depth == 0:
-        max_p_it = max(p_it_list)
-        index = p_it_list.index(max_p_it)
-        vertex = uncoloured_vertice[index]
-        colour = colour_vert(vertex, neighbour_colours)
-        return vertex, colour
-    # [Kasia2] - if no vertex has been chosen we run algorithm again
-    vertex, colour = choose_vert_dsatur(graph, colour_groups_l, M_trail, neighbour_colours,
-                                        alpha_1, beta_1, partial_solution, uncoloured_vertice, neigh_colour_uncoloured, deg_l, depth-1)
-    return vertex, colour
 
+    # [Kasia2] - if we get no vertex after choice repetition we randomly get the one with maximum probability
+    max_p_it = max(p_it_list)
+    # [Khanh2] - randomly pick among best candidates
+    indexes = [i for i, p in enumerate(p_it_list) if p == max_p_it]
+    random_index = choice(indexes)
+    vertex = uncoloured_vertice[random_index]
+    colour = colour_vert(vertex, neighbour_colours)
+    return vertex, colour
 
 # [Kasia2] - additional argument: trail_matrix: MTrail
 # dsatur(...) - DSATUR algorithm implementation
-def dsatur(graph: Graph, trail_matrix: MTrail):
+def dsatur(graph: Graph, trail_matrix: MTrail, alpha, beta):
     # [Kasia2] - additional argument: trail_matrix: MTrail
     M_trail = trail_matrix.M
     num_of_nodes = len(graph.nodes)
@@ -201,7 +198,7 @@ def dsatur(graph: Graph, trail_matrix: MTrail):
         iteration += 1
         print('iteration'+str(iteration))
         uncoloured_check(neighbour_colours, neighbour_colours_uncoloured, uncoloured_nodes)
-        current_vertex, colour = choose_vert_dsatur(graph, colour_groups, M_trail, neighbour_colours, 0.5, 0.5,
+        current_vertex, colour = choose_vert_dsatur(graph, colour_groups, M_trail, neighbour_colours, alpha, beta,
                                                     vertex_colours, uncoloured_nodes, neighbour_colours_uncoloured, deg_list)
         vertex_colours[current_vertex - 1] = colour
         neigh_colours_update(current_vertex, vertex_colours[current_vertex - 1], graph.edges, neighbour_colours,

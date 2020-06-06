@@ -6,7 +6,7 @@
 import networkx as nx
 from netwulf import visualize
 
-files = ["jean.col", "le450_5a.col","le450_5b.col", "le450_5c.col", "le450_5d.col"]
+files = ["graph-us-02.col", "queen7_7.col","jean.col", "le450_5a.col",]
 
 
 class Graph:
