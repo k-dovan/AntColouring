@@ -10,10 +10,10 @@ from graph_generator import bipartite_graph_generator, \
                             random_graph_generator, \
                             complete_graph_generator
 from timeit import default_timer as timer
-from statistics import mean, median
+from statistics import mean, median, stdev
 
 # number of nodes, number of ants and number of cycles for testing
-nodes_list = [5, 10, 20]
+nodes_list = [5, 10, 20, 30]
 n_ants_list = [5, 10, 20]
 max_cycles_list = [5, 10, 20]
 
@@ -44,21 +44,25 @@ def test_time(graph, param_list, param_name: str):
         mean_val_res = mean(temp_val_list)
         mean_val = int(mean(times) * pow(10, 9))
         median_val = int(median(times) * pow(10, 9))
-        max_val = int(max (times) * pow(10, 9))
+        max_val = int(max(times) * pow(10, 9))
         min_val = int(min(times) * pow(10, 9))
+        stdev_val = int(stdev(times) * pow(10, 9))
         solution_list.append(mean_val_res)
-        times_stats.append((mean_val, median_val, min_val, max_val))
+        times_stats.append((mean_val, median_val, min_val, max_val, stdev_val))
     return solution_list, times_stats
 
 
 if __name__ == '__main__':
     with open('report_execution_time.txt', 'w') as file:
         file.writelines('Test execution time [picoseconds] for different graph types and nodes.\n\n')
-        file.writelines('Nodes\t|N_ants\t|Cycles\t|\t\tBipartite\t\t|\t\tComplete\t\t|\t\tRandom\t\t\t|\n')
-        file.writelines('\t\t\t|X_mean\tt_mean\tt_med\tt_min\tt_max\t|X_mean\tt_mean\tt_med\tt_min\tt_max\t|X_mean\tt_mean\tt_med\tt_min\tt_max\t\n')
+        file.writelines('Nodes\t|N_ants\t|Cycles\t|\t\t\t\t\tBipartite\t\t\t\t\t|\t\t\t\t\tComplete\t\t\t\t\t|\t\t\t\t\tRandom\t\t\t\t\t\t|\n')
+        file.writelines('\t\t\t|X_mean\tt_mean\t\tt_med\t\tt_min\t\tt_max\t\tt_stdev\t\t|X_mean\tt_mean\t\tt_med\t\tt_min\t\tt_max\t\tt_stdev\t\t|X_mean\tt_mean\t\tt_med\t\tt_min\t\tt_max\t\tt_stdev\t\t\n')
+
+        # bipartite shape will be similar in all cases
+        sides_proportion = 0.4
         for non in nodes_list:
             # generate bipartite graph
-            side1 = randrange(1, non-1)
+            side1 = int(non*0.4)
             side2 = non-side1
             print('bipartite sides:')
             print(side1)
@@ -103,13 +107,13 @@ if __name__ == '__main__':
             for cycle in max_cycles_list:
                 string_bip = '|'+ str(bip_sol_cycles[ind]) + '\t' + str(bip_t_cycles[ind][0]) + '\t' \
                              + str(bip_t_cycles[ind][1]) + '\t' + str(bip_t_cycles[ind][2]) + '\t' \
-                             + str(bip_t_cycles[ind][3]) + '\t'
+                             + str(bip_t_cycles[ind][3]) + '\t' + str(bip_t_cycles[ind][4]) + '\t'
                 string_com = '|' + str(com_sol_cycles[ind]) + '\t' + str(com_t_cycles[ind][0]) + '\t' \
                              + str(com_t_cycles[ind][1]) + '\t' + str(com_t_cycles[ind][2]) + '\t' \
-                             + str(com_t_cycles[ind][3]) + '\t'
+                             + str(com_t_cycles[ind][3]) + '\t'+ str(com_t_cycles[ind][4]) + '\t'
                 string_ran = '|' + str(ran_sol_cycles[ind]) + '\t' + str(ran_t_cycles[ind][0]) + '\t' \
                              + str(ran_t_cycles[ind][1]) + '\t' + str(ran_t_cycles[ind][2]) + '\t' \
-                             + str(ran_t_cycles[ind][3]) + '\t'
+                             + str(ran_t_cycles[ind][3]) + '\t'+ str(ran_t_cycles[ind][4]) + '\t'
 
                 file.writelines(str(non) + '\t5\t' + str(cycle)+ '\t' + string_bip + string_com + string_ran + '\n')
                 ind += 1
