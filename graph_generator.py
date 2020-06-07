@@ -86,6 +86,6 @@ if __name__ == "__main__":
     G.add_nodes_from(graph4.nodes)
     G.add_edges_from(graph4.edges)
 
-    graph_to_file(graph4, 'experiment1')
+    # graph_to_file(graph4, 'experiment1')
 
     visualize(G)

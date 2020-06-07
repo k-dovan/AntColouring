@@ -10,11 +10,17 @@ from statistics import mean, median
 in_files = ['myciel3.col', 'queen5_5.col', 'jean.col']
 
 # Parameters to test
-n_ants_list = [5, 20, 40]
-max_cycles_list = [5, 20, 40]
-p_coeff_list = [0.4, 0.5, 0.6]
-alpha_list = [0, 2, 4]
-beta_list = [0, 2, 4]
+# n_ants_list = [5, 20, 40]
+# max_cycles_list = [5, 20, 40]
+# p_coeff_list = [0.4, 0.5, 0.6]
+# alpha_list = [0, 2, 4]
+# beta_list = [0, 2, 4]
+
+n_ants_list = [20, 40]
+max_cycles_list = [20, 40]
+p_coeff_list = [0.5, 0.6]
+alpha_list = [2, 4]
+beta_list = [2, 4]
 
 
 def test_func(graph, param_list, param_name: str):
@@ -71,11 +77,11 @@ if __name__ == '__main__':
                 test_param = params_lists[i]
 
                 file.write(header + ' test:\n')
-                file.write(header + '\tmean\tmedian\tmax\tmin\n')
+                file.write(header + '\t\tmean\tmedian\tmax\tmin\n')
                 for i in range(len(test_solution)):
                     solution = test_solution[i]
                     param = test_param[i]
-                    file.write(str(param) + '\t' + str(solution[0]) + '\t' + str(solution[1]) + '\t' + str(solution[2]) + '\t' + str(solution[3]) + '\n')
+                    file.write(str(param) + '\t\t' + str(solution[0]) + '\t' + str(solution[1]) + '\t' + str(solution[2]) + '\t' + str(solution[3]) + '\n')
                 file.write('\n\n')
 
             file.write('\n\n\n')

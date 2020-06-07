@@ -196,7 +196,7 @@ def dsatur(graph: Graph, trail_matrix: MTrail, alpha, beta):
     while uncoloured_nodes:
         # [Kasia] integrity check
         iteration += 1
-        print('iteration'+str(iteration))
+        # print('iteration'+str(iteration))
         uncoloured_check(neighbour_colours, neighbour_colours_uncoloured, uncoloured_nodes)
         current_vertex, colour = choose_vert_dsatur(graph, colour_groups, M_trail, neighbour_colours, alpha, beta,
                                                     vertex_colours, uncoloured_nodes, neighbour_colours_uncoloured, deg_list)
